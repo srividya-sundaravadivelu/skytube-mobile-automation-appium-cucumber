@@ -1,0 +1,4 @@
+stepdefinitions\VideoBlockerSteps.class
+stepdefinitions\WatchedVideoCleanerSteps.class
+hooks\Hooks.class
+runner\TestRunner.class
