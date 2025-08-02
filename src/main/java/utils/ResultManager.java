@@ -1,7 +1,7 @@
 package utils;
 
 import io.cucumber.java.Scenario;
-import io.github.the_sdet.common.CommonUtils.STATUS;
+import utils.CommonUtils.STATUS;
 import logger.Log;
 
 import java.util.HashMap;

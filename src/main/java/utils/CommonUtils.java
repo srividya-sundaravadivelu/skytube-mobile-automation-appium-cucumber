@@ -3,10 +3,11 @@ package utils;
 import io.cucumber.java.Scenario;
 import logger.Log;
 
+import java.time.Duration;
 import java.util.Properties;
 
 import static engine.Engine.getDriver;
-import static io.github.the_sdet.cucumber.CucumberUtils.*;
+import static utils.CucumberUtils.*;
 
 /**
  * Class to handle common utilities
@@ -36,4 +37,41 @@ public class CommonUtils {
             attachScreenshot(getDriver());
         }
     }
+    
+    public enum STATUS {
+        /**
+         * Represents status PASS.
+         */
+        PASS("PASS"),
+
+        /**
+         * Represents status FAIL.
+         */
+        FAIL("FAIL");
+
+        /**
+         * The status string.
+         */
+        public final String status;
+
+        /**
+         * Constructs a STATUS enum with the given status string.
+         *
+         * @param status
+         *            the status string
+         */
+        STATUS(String status) {
+          this.status = status;
+        }
+      }
+    
+    public static void waitFor(Duration duration) {
+        try {
+          Thread.sleep(duration.toMillis());
+        } catch (InterruptedException e) {
+          Log.error("Error while applying wait...", e);
+        }
+        Log.info(duration.toSeconds() + " seconds of wait completed...");
+      }
+    
 }

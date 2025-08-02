@@ -153,11 +153,11 @@
 			<version>${maven.cucumber.reporting.version}</version>
 		</dependency>
 
-		<dependency>
+		<!--<dependency>
 			<groupId>io.github.the-sdet</groupId>
 			<artifactId>test-automation-toolkit</artifactId>
 			<version>${test.automation.toolkit.version}</version>
-		</dependency>
+		</dependency>-->
 
 	</dependencies>
 	<build>

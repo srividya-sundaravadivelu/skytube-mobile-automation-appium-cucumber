@@ -2,7 +2,9 @@ pages\BasePage.class
 engine\Engine.class
 globalconstants\constants.class
 pages\WatchedVideoCleanerPage.class
+utils\CommonUtils$STATUS.class
 utils\ConfigReader.class
+utils\CucumberUtils.class
 pages\VideoBlockerPage.class
 logger\Log.class
 utils\CommonUtils.class

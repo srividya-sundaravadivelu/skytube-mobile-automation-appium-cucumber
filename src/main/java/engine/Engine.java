@@ -2,7 +2,6 @@ package engine;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import logger.Log;
@@ -14,15 +13,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
 import java.util.Properties;
-
-import static io.github.the_sdet.common.CommonUtils.waitFor;
 import static utils.ConfigReader.*;
+import static utils.CommonUtils.*;
 
 /**
  * Class to handle Appium Driver Initialization, termination and other driver management utils.
  * 
  */
-@SuppressWarnings("unused")
 public class Engine {
     static ThreadLocal<AppiumDriver> tlDriver = new ThreadLocal<>();
     private static AppiumDriverLocalService service;
@@ -44,7 +41,6 @@ public class Engine {
      * Check if the execution is to be done on local
      *
      * @return true if local execution, false otherwise
-     * @author Pabitra Swain (contact.the.sdet@gmail.com)
      */
     public static boolean isLocal() {
         return executionType.equals("local");
@@ -72,7 +68,6 @@ public class Engine {
     /**
      * Stop the Appium server if it is running.
      *
-     * @author Pabitra Swain (contact.the.sdet@gmail.com)
      */
     public static void stopAppiumServer() {
         if (service != null && service.isRunning()) {
@@ -88,8 +83,6 @@ public class Engine {
     public static void initializeDriver() {
         Properties properties = getProperties();
         AppiumDriver driver;
-        String executionType = properties.getProperty("execution.type");
-
         URL appiumServerURL = isLocal() ? startAppiumServer() : frameUrl(properties.getProperty("appium.server.url.remote"));
 
         assert appiumServerURL != null;
@@ -112,7 +105,6 @@ public class Engine {
      * Get the current Appium driver.
      *
      * @return the current Appium driver.
-     * @author Pabitra Swain (contact.the.sdet@gmail.com)
      */
     public static AppiumDriver getDriver() {
         return tlDriver.get();
@@ -137,45 +129,6 @@ public class Engine {
             waitFor(Duration.ofSeconds(2));
             driver.quit();
             Log.info("App Terminated...");
-        }
-    }
-
-    /**
-     * Activate the app associated with the current driver.
-     * Logs information when the app is activated.
-     * 
-     */
-//    public static void activateApp() {
-//        if (isAndroid()) {
-//            ((AndroidDriver) getDriver()).activateApp(appPackage);
-//            waitFor(Duration.ofSeconds(1));
-//        } else {
-//            ((IOSDriver) getDriver()).activateApp(appPackage);
-//            waitFor(Duration.ofSeconds(1));
-//        }
-//        Log.info("App Activated...");
-//    }
-
-    /**
-     * Relaunch the app associated with the current driver.
-     *  
-     */
-    public static void relaunchApp() {
-        if (isAndroid()) {
-            try {
-                ((AndroidDriver) getDriver()).terminateApp(appPackage);
-            } catch (Exception e) {
-                waitFor(Duration.ofSeconds(1));
-                ((AndroidDriver) getDriver()).terminateApp(appPackage);
-            }
-            waitFor(Duration.ofSeconds(1));
-            ((AndroidDriver) getDriver()).activateApp(appPackage);
-            waitFor(Duration.ofSeconds(1));
-        } else {
-            ((IOSDriver) getDriver()).terminateApp(appPackage);
-            waitFor(Duration.ofSeconds(1));
-            ((IOSDriver) getDriver()).activateApp(appPackage);
-            waitFor(Duration.ofSeconds(1));
         }
     }
 
@@ -340,4 +293,6 @@ public class Engine {
         sauceOptions.setCapability("deviceOrientation", properties.getProperty("sauce.labs.device.orientation"));
         return sauceOptions;
     }
+    
+    
 }

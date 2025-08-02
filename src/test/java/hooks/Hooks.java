@@ -6,7 +6,7 @@ import logger.Log;
 import java.util.HashSet;
 
 import static engine.Engine.*;
-import static io.github.the_sdet.cucumber.CucumberUtils.*;
+import static utils.CucumberUtils.*;
 import static utils.CommonUtils.attachScreenshotPerConfig;
 import static utils.ResultManager.*;
 
@@ -20,6 +20,7 @@ public class Hooks {
 
     static String featureName;
     static HashSet<String> features = new HashSet<>();
+    public static ThreadLocal<Scenario> tlScenario = new ThreadLocal<>();
 
     /**
      * Method executed before all tests.
@@ -81,4 +82,6 @@ public class Hooks {
         Log.info("Extent PDF: " + home + "\\testReports\\ExtentReport.pdf");
         Log.info("------------------------------------------------------");
     }
+    
+    
 }
