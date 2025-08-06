@@ -27,7 +27,8 @@ public class Engine {
     private static final String executionType = getProperties().getProperty("execution.type").toLowerCase();
     private static final String appPackage = isAndroid() ?
             getAndroidProperties().getProperty("app.package") : getIosProperties().getProperty("app.package");
-
+    private static URL appiumserverUrl;
+    
     /**
      * Check if the platform is Android.
      *
@@ -44,7 +45,8 @@ public class Engine {
      */
     public static boolean isLocal() {
         return executionType.equals("local");
-    }
+    }   
+    
 
     /**
      * Start the Appium server.
@@ -54,13 +56,14 @@ public class Engine {
     public static URL startAppiumServer() {
         AppiumServiceBuilder builder = new AppiumServiceBuilder()
                 .withIPAddress(getProperties().getProperty("appium.server.url.local"))
-                .usingAnyFreePort();
+                .usingAnyFreePort()
+                .withArgument(() -> "--use-plugins", "appium-reporter-plugin");
 
         // Start the Appium server
         service = AppiumDriverLocalService.buildService(builder);
         service.start();
         service.clearOutPutStreams();
-        URL appiumserverUrl = service.getUrl();
+        appiumserverUrl = service.getUrl();
         Log.info("Appium Server started at: " + appiumserverUrl);
         return appiumserverUrl;
     }
@@ -109,6 +112,10 @@ public class Engine {
     public static AppiumDriver getDriver() {
         return tlDriver.get();
     }
+    
+    public static URL getAppiumServerUrl() {
+        return appiumserverUrl;
+    }
 
     /**
      * Quit the current Appium driver if it is not null.
@@ -138,7 +145,7 @@ public class Engine {
      * @param url the string representation of the URL.
      * @return the URL object parsed from the string. 
      */
-    private static URL frameUrl(String url) {
+    public static URL frameUrl(String url) {
         try {
             return new URL(url);
         } catch (MalformedURLException e) {

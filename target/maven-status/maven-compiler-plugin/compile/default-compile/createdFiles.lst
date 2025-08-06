@@ -7,5 +7,6 @@ utils\ConfigReader.class
 utils\CucumberUtils.class
 pages\VideoBlockerPage.class
 logger\Log.class
+reporter\PluginReporter.class
 utils\CommonUtils.class
 utils\ResultManager.class
