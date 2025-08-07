@@ -1,12 +1,12 @@
 pages\BasePage.class
-engine\Engine.class
 globalconstants\constants.class
-pages\WatchedVideoCleanerPage.class
 utils\CommonUtils$STATUS.class
 utils\ConfigReader.class
 utils\CucumberUtils.class
-pages\VideoBlockerPage.class
 logger\Log.class
 reporter\PluginReporter.class
 utils\CommonUtils.class
+engine\Engine.class
+pages\WatchedVideoCleanerPage.class
+pages\VideoBlockerPage.class
 utils\ResultManager.class

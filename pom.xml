@@ -158,13 +158,13 @@
 			<artifactId>test-automation-toolkit</artifactId>
 			<version>${test.automation.toolkit.version}</version>
 		</dependency>-->
-		
-		 <dependency>
-            <groupId>com.konghq</groupId>
-            <artifactId>unirest-java</artifactId>
-            <version>3.14.1</version>
-            <classifier>standalone</classifier>
-        </dependency>
+
+		<dependency>
+			<groupId>com.konghq</groupId>
+			<artifactId>unirest-java</artifactId>
+			<version>3.14.1</version>
+			<classifier>standalone</classifier>
+		</dependency>
 
 	</dependencies>
 	<build>
