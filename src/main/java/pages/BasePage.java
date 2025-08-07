@@ -49,5 +49,21 @@ public class BasePage {
 	public void goBack() {
 		driver.navigate().back();
 	}
+	
+	public boolean safeSendKeys(WebElement element, String text) {
+	    try {
+	        if (element.isDisplayed() && element.isEnabled()) {
+	            element.clear();  // Optional: clears existing text
+	            element.sendKeys(text);
+	            return true;
+	        } else {
+	            System.out.println("Element not interactable (either not displayed or not enabled): " + element);
+	        }
+	    } catch (Exception e) {
+	        System.out.println("Exception while sending keys to element: " + element);
+	        e.printStackTrace();  // Optional for debugging
+	    }
+	    return false;
+	}
 
 }
