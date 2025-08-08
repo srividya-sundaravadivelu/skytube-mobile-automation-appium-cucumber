@@ -56,8 +56,8 @@ public class Engine {
     public static URL startAppiumServer() {
         AppiumServiceBuilder builder = new AppiumServiceBuilder()
                 .withIPAddress(getProperties().getProperty("appium.server.url.local"))
-                .usingAnyFreePort()
-                .withArgument(() -> "--use-plugins", "appium-reporter-plugin");
+                .usingAnyFreePort();
+               // .withArgument(() -> "--use-plugins", "appium-reporter-plugin");
 
         // Start the Appium server
         service = AppiumDriverLocalService.buildService(builder);
