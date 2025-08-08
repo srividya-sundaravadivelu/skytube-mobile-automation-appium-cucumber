@@ -183,6 +183,11 @@ public class Engine {
         capabilities.setCapability("disableAndroidWatchers", Boolean.parseBoolean(androidProperties.getProperty("disable.android.watchers"))); // Disable Android system event watchers
         capabilities.setCapability("ignoreUnimportantViews", Boolean.parseBoolean(androidProperties.getProperty("ignore.unimportant.views"))); // Ignore unimportant views to improve speed
         capabilities.setCapability("disableNotifications", Boolean.parseBoolean(androidProperties.getProperty("disable.notifications"))); // Disable notifications during test
+        
+     // 🚀 Auto-start emulator
+        capabilities.setCapability("avd", androidProperties.getProperty("avd.name")); // e.g., Pixel_6_API_34
+        capabilities.setCapability("avdLaunchTimeout", 500000);
+        capabilities.setCapability("avdReadyTimeout", 500000);
         return capabilities;
     }
 
