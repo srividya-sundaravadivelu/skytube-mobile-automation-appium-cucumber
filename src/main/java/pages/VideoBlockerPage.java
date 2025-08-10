@@ -28,10 +28,18 @@ public class VideoBlockerPage extends BasePage {
 
 	@AndroidFindBy(uiAutomator = "new UiSelector().text(\"Preferences\")")
 	public WebElement preferences;
+	
+	@AndroidFindBy(uiAutomator = "new UiSelector().text(\"TRENDING (US)\")")
+	public WebElement trendingUsTab;
 
 	public void dismissVerisonUpdatePopup() {
 		safeClick(dismissPopupButton);
 	}
+	
+	public void clickTrendingUsTab() {
+		safeClick(trendingUsTab);
+	}
+
 
 	public void clickVideoBlocker() {
 		safeClick(shieldButton);

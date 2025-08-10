@@ -18,11 +18,12 @@ public class VideoBlockerSteps {
 	@Given("The user is on the application's home page")
 	public void the_user_is_on_the_application_s_home_page() {
 		videoBlockerPage.dismissVerisonUpdatePopup();
+		videoBlockerPage.clickTrendingUsTab();
 	}
 	
 	@When("The user taps the shield icon next to search button")
 	public void the_user_taps_the_shield_icon_next_to_search_button() {
-	   videoBlockerPage.clickVideoBlocker();
+	   videoBlockerPage.clickVideoBlocker();	  
 	}
 	
 	@Then("The user should see the Video Blocker popup with buttons Cancel and Setup")
