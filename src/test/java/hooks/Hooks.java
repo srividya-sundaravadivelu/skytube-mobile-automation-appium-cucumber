@@ -2,14 +2,16 @@ package hooks;
 
 import io.cucumber.java.*;
 import logger.Log;
+import reporter.PluginReporter;
 
+import java.io.IOException;
 import java.util.HashSet;
 
 import static engine.Engine.*;
 import static utils.CucumberUtils.*;
 import static utils.CommonUtils.attachScreenshotPerConfig;
 import static utils.ResultManager.*;
-
+import static reporter.PluginReporter.*;
 
 /**
  * Hooks class containing setup and tear-down methods for test scenarios.
@@ -28,7 +30,7 @@ public class Hooks {
      */
     @BeforeAll
     public static void beforeAll() {
-        initializeDriver();
+    	initializeDriver();
     }
 
     /**
@@ -37,7 +39,8 @@ public class Hooks {
      * @param scenario The scenario being executed.
      */
     @Before
-    public void beforeTest(Scenario scenario) {
+    public void beforeTest(Scenario scenario) {   	
+    	
         String currentFeatureName = getFeatureNameFromScenario(scenario, false);
         if (!features.contains(currentFeatureName)) {
             featureName = currentFeatureName;
@@ -60,15 +63,30 @@ public class Hooks {
         // Update Result for Current Scenario
         updateResult(scenario, featureName);
         attachScreenshotPerConfig(scenario);
+        
+        String sessionId = getDriver().getSessionId().toString();
+        String testName = scenario.getName();
+      
+        String testStatus = scenario.isFailed() ? "failed" : "passed";
+        String errorMessage = ""; // TODO:     
+
+        setTestInfo(sessionId, testName, testStatus, errorMessage,getAppiumServerUrl());
     }
 
     /**
      * Method executed after all tests.
+     * @throws InterruptedException 
+     * @throws IOException 
      *
      */
     @AfterAll
-    public static void afterAll() {
+    public static void afterAll() throws IOException, InterruptedException {
         printResult();
+        
+        String report = PluginReporter.getReport(getAppiumServerUrl());
+        PluginReporter.deleteReportData(getAppiumServerUrl());
+        createReportFile(report, "report");
+        
         quitDriver();
         stopAppiumServer();
         String home = System.getProperty("user.dir");
@@ -81,6 +99,7 @@ public class Hooks {
         Log.info("Extent HTML: " + home + "\\testReports\\ExtentReport.html");
         Log.info("Extent PDF: " + home + "\\testReports\\ExtentReport.pdf");
         Log.info("------------------------------------------------------");
+        
     }
     
     
