@@ -1,4 +1,4 @@
-@Subscribe&Unsubscribe
+@SubscribeandUnsubscribe
 Feature: Verify the subscribe and unsubscribe channel functionality
 
 Background: Launching of the app and search the channel
