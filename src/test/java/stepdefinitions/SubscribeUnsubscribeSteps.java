@@ -13,12 +13,19 @@ public class SubscribeUnsubscribeSteps {
 	
 	@When("The user navigate to channel option from menu and click on subscribe option")
 	public void the_user_navigate_to_channel_option_from_menu_and_click_on_subscribe_option() {
+		//subunsubPage.navigateToChannelAndSubscribe();
+		subunsubPage.subunsubmenuoption();
+		subunsubPage.channelMenuOption();
 		subunsubPage.navigateToChannelAndSubscribe();
 	}
 	
     @When("The user navigate to channel option from menu and click on unsubscribe option")
     public void the_user_navigate_to_channel_option_from_menu_and_click_on_unsubscribe_option() {
-    	subunsubPage.navigateToChannelAndUnSubscribe();
+    	subunsubPage.subunsubmenuoption();
+		subunsubPage.channelMenuOption();
+		subunsubPage.navigateToChannelAndUnSubscribe();
+    	
+//    	subunsubPage.navigateToChannelAndUnSubscribe();
     	
     }
 

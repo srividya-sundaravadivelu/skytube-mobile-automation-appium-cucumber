@@ -75,15 +75,28 @@ public class SunscribeUnsubscribePage extends BasePage {
 	{
 		safeClick(unsubscribeButton);
 	}
-	public void navigateToChannelAndSubscribe() {
+	
+	public void subunsubmenuoption() {
 		safeClick(firstOptionsButton);
+	}
+	public void channelMenuOption() {
 		safeClick(channelMenuOption);
-		safeClick(subscribeoption);
 	}
 	
+	public void navigateToChannelAndSubscribe() {
+//		safeClick(firstOptionsButton);
+//		safeClick(channelMenuOption);
+		safeClick(subscribeoption);
+	}
+//	public void navigateToChannelAndSubscribe() {
+//		safeClick(firstOptionsButton);
+//		safeClick(channelMenuOption);
+//		safeClick(subscribeoption);
+//	}
+//	
 	public void navigateToChannelAndUnSubscribe() {
-		safeClick(firstOptionsButton);
-		safeClick(channelMenuOption);
+//		safeClick(firstOptionsButton);
+//		safeClick(channelMenuOption);
 		safeClick(unsubscribeoption);
 	}
 	public boolean isToastMessageDisplayed(String expectedText) {
