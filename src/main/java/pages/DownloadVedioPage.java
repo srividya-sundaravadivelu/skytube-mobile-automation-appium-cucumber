@@ -120,7 +120,9 @@ public class DownloadVedioPage extends BasePage {
 				WebElement toast = wait
 						.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//android.widget.Toast")));
 
-				String message = toast.getText();
+				//String message = toast.getText();
+				String message = toast.getAttribute("name");
+
 				System.out.println("Captured Toast: " + message);
 
 				if (message.toLowerCase().contains("downloading")) {
