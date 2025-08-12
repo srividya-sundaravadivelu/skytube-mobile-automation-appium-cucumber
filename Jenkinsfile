@@ -8,6 +8,7 @@ pipeline {
 
     environment {
         ANDROID_HOME = "${env.ANDROID_HOME}"
+        ANDROID_AVD_HOME = "C:\\Users\\srivi\\.android\\avd"  // explicit path to AVD config folder
         EMULATOR_NAME = "Medium_Phone_API_36.0"
         EMULATOR_PORT = "5554"
     }
