@@ -19,6 +19,15 @@ pipeline {
             }
         }
 
+        stage('Print Env') {
+              steps {
+                bat 'set ANDROID_HOME'
+                bat 'echo %USERPROFILE%'
+                bat '%ANDROID_HOME%\\emulator\\emulator.exe -list-avds'
+              }
+        }
+
+
         stage('Start Android Emulator') {
             steps {
                 script {
