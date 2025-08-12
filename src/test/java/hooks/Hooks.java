@@ -90,8 +90,8 @@ public class Hooks {
         quitDriver();
         stopAppiumServer();
         
-        Thread.sleep(2000);
-        closeEmulator();
+//        Thread.sleep(2000);
+//        closeEmulator();
         
         
         String home = System.getProperty("user.dir");
