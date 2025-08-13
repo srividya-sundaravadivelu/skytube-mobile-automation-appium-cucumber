@@ -58,11 +58,7 @@ public class Engine {
      * @return URL of the started Appium server.    
      */
     public static URL startAppiumServer() {
-        // Path to the Appium main.js script
-        File appiumMainJS = new File("C:\\Users\\srivi\\AppData\\Roaming\\npm\\node_modules\\appium\\build\\lib\\main.js");
-
         AppiumServiceBuilder builder = new AppiumServiceBuilder()
-                .withAppiumJS(appiumMainJS)  // <-- Explicitly set Appium path
                 .withIPAddress(getProperties().getProperty("appium.server.url.local"))
                 .usingAnyFreePort()
                 .withArgument(() -> "--use-plugins", "appium-reporter-plugin");
