@@ -22,6 +22,7 @@ pipeline {
                     bat """
                     echo Starting Android emulator...
                     start /b ${ANDROID_HOME}\\emulator\\emulator.exe -avd ${EMULATOR_NAME} -no-window -no-audio -no-boot-anim -port ${EMULATOR_PORT}
+                    timeout /t 60 /nobreak
                     """
 
                     timeout(time: 5, unit: 'MINUTES') {
