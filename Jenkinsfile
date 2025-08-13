@@ -26,12 +26,12 @@ pipeline {
 
                     timeout(time: 5, unit: 'MINUTES') {
                         waitUntil {
-                            def booted = bat (
-                                script: "${ANDROID_HOME}\\platform-tools\\adb.exe -s emulator-${EMULATOR_PORT} shell getprop sys.boot_completed",
+                            def booted = bat(
+                                script: "${env.ANDROID_HOME}\\platform-tools\\adb.exe -s emulator-${env.EMULATOR_PORT} shell getprop sys.boot_completed",
                                 returnStdout: true
                             ).trim()
-                            echo "Boot status: ${booted}"
-                            return booted == '1'
+                            echo "Boot status: '${booted}'"
+                            return booted.toInteger() == 1
                         }
                     }
                     echo "Android emulator is booted and ready."
