@@ -36,9 +36,6 @@ public class DownloadVedioPage extends BasePage {
 	@AndroidFindBy(uiAutomator = "new UiSelector().text(\"TRENDING (US)\")")
 	public WebElement trendingUsTab;
 
-//	@AndroidFindBy(xpath = "(//android.widget.ImageButton[@resource-id=\"free.rm.skytube.extra:id/options_button\"]")
-//	public WebElement threeDotsOfDownloads;
-
 	@AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"free.rm.skytube.extra:id/options_button\")")
 	public WebElement threeDotsOfDownloads;
 
@@ -75,7 +72,14 @@ public class DownloadVedioPage extends BasePage {
 		String toastMessage = toastElement.getText();
 		System.out.println("Captured Toast: " + toastMessage);
 
-	}
+	}	
+
+	// Wait explicitly only for toast presence, because plugin won't handle this
+    public String waitForToastMessage(int timeoutSeconds) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds));
+        WebElement toast = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//android.widget.Toast")));
+        return toast.getText();
+    }
 
 	public String waitForFinalDownloadToast(int maxWaitInSeconds) {
 		long startTime = System.currentTimeMillis();

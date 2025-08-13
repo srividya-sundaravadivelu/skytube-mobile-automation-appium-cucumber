@@ -23,22 +23,22 @@ public class DownloadVideoSteps {
 
 	@Then("The Downloads Tab should display a message Download some videos to find them here")
 	public void the_downloads_tab_should_display_a_message_download_some_videos_to_find_them_here() {
-		WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+//		WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+//
+//		// Locate the empty state message element
+//		WebElement emptyMessageElement = wait
+//				.until(ExpectedConditions.visibilityOf(downloadVedioPage.downloadSomeVediosMsg));	
 
-		// Locate the empty state message element
-		WebElement emptyMessageElement = wait
-				.until(ExpectedConditions.visibilityOf(downloadVedioPage.downloadSomeVediosMsg));
+		// Assert.assertEquals("Download some videos to find them here.",
+		// emptyMessageElement.getText());
 
-		//System.out.println("Empty Downloads Message: " + emptyMessageElement.getText());
-
-		Assert.assertEquals("Download some videos to find them here.", emptyMessageElement.getText());
+		String msg = downloadVedioPage.downloadSomeVediosMsg.getText();
+		Assert.assertEquals("Download some videos to find them here.", msg);
 	}
 
 	@When("user taps three dots next to the video and select Download option of the video")
 	public void user_taps_three_dots_next_to_the_video_and_select_download_option_of_the_video() {
 
-		// downloadVedioPage.clickThreeDotMenu();
-		// downloadVedioPage.clickDownloadMenuItem();
 		downloadVedioPage.testDownloadToastFlowDynamicWait();
 
 	}
@@ -72,32 +72,16 @@ public class DownloadVideoSteps {
 		downloadVedioPage.clickThreeDotsOfDownloads();
 
 		WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
-		WebElement deleteOption = wait.until(ExpectedConditions.visibilityOf(downloadVedioPage.deleteDownloadOption)); // Adjust
-																														// if
-																														// needed
+		WebElement deleteOption = wait.until(ExpectedConditions.visibilityOf(downloadVedioPage.deleteDownloadOption));
 		deleteOption.click();
 
 	}
 
 	@Then("The selected video should be deleted from downloads tab")
 	public void the_selected_video_should_be_deleted_from_downloads_tab() {
-		// downloadVedioPage.isDownloadMsgDisplayed();
-		WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
 
-		// Wait for a short moment to allow UI to update
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-
-		// Try to locate the deleted video
-		boolean isDeleted;
-		try {
-			isDeleted = wait.until(ExpectedConditions.invisibilityOf(downloadVedioPage.titleOfDownloadedVedio));
-		} catch (Exception e) {
-			isDeleted = false;
-		}
+		boolean isDeleted = new WebDriverWait(getDriver(), Duration.ofSeconds(10))
+				.until(ExpectedConditions.invisibilityOf(downloadVedioPage.titleOfDownloadedVedio));
 
 		Assert.assertTrue("Video was not deleted from downloads tab!", isDeleted);
 	}

@@ -57,7 +57,10 @@ public class Engine {
         AppiumServiceBuilder builder = new AppiumServiceBuilder()
                 .withIPAddress(getProperties().getProperty("appium.server.url.local"))
                 .usingAnyFreePort()
-                .withArgument(() -> "--use-plugins", "appium-reporter-plugin");
+                .withArgument(() -> "--use-plugins", "appium-reporter-plugin")
+                .withArgument(() -> "--use-plugins", "element-wait");
+
+        
 
         // Start the Appium server
         service = AppiumDriverLocalService.buildService(builder);
@@ -183,6 +186,13 @@ public class Engine {
         capabilities.setCapability("disableAndroidWatchers", Boolean.parseBoolean(androidProperties.getProperty("disable.android.watchers"))); // Disable Android system event watchers
         capabilities.setCapability("ignoreUnimportantViews", Boolean.parseBoolean(androidProperties.getProperty("ignore.unimportant.views"))); // Ignore unimportant views to improve speed
         capabilities.setCapability("disableNotifications", Boolean.parseBoolean(androidProperties.getProperty("disable.notifications"))); // Disable notifications during test
+        //Element Wait Plugin Capabilities
+        capabilities.setCapability("appium:element-wait:enabled", true);
+        capabilities.setCapability("appium:element-wait:timeout", 10000);
+        capabilities.setCapability("appium:element-wait:interval", 500);
+        //capabilities.setCapability("appium:element-wait:condition", "visible");
+        capabilities.setCapability("appium:element-wait:condition", androidProperties.getProperty("element.wait.condition", "visible"));
+
         return capabilities;
     }
 
