@@ -322,9 +322,9 @@ public class Engine {
         capabilities.setCapability("disableNotifications", Boolean.parseBoolean(androidProperties.getProperty("disable.notifications"))); // Disable notifications during test
 
      // 🚀 Auto-start emulator
-        capabilities.setCapability("avd", androidProperties.getProperty("avd.name")); // e.g., Pixel_6_API_34
-        capabilities.setCapability("avdLaunchTimeout", 120000);
-        capabilities.setCapability("avdReadyTimeout", 120000);
+//        capabilities.setCapability("avd", androidProperties.getProperty("avd.name")); // e.g., Pixel_6_API_34
+//        capabilities.setCapability("avdLaunchTimeout", 120000);
+//        capabilities.setCapability("avdReadyTimeout", 120000);
         return capabilities;
     }
 
