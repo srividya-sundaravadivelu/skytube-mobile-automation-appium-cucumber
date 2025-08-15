@@ -142,48 +142,6 @@ public class Engine {
         }
     }
     
-  /*close Emulator*/
-  
-  @SuppressWarnings("deprecation")
-  public static void closeEmulator() throws IOException, InterruptedException {
-  	Properties androidProperties = getAndroidProperties();
-      String deviceName = androidProperties.getProperty("device.name"); // e.g. emulator-5554
-      String avdName = androidProperties.getProperty("avd.name");       // e.g. Pixel_6_API_34
-
-      if (deviceName == null || deviceName.trim().isEmpty()) {
-          Log.warn("Device name not found in android.properties, trying to detect from adb devices...");
-          deviceName = getFirstRunningEmulator();
-      }
-
-      if (deviceName == null) {
-          Log.error("No emulator found to close.");
-          return;
-      }
-
-      Log.info("Closing emulator [" + deviceName + "]" + (avdName != null ? " (" + avdName + ")" : "") + " via adb...");
-      Process process = Runtime.getRuntime().exec("adb -s " + deviceName + " emu kill");
-      process.waitFor();
-      Log.info("Emulator closed successfully.");
-  }    
-  
-  
-  /**
-   * Detects the first running emulator from adb devices output.
-   */
-  private static String getFirstRunningEmulator() throws IOException {
-      @SuppressWarnings("deprecation")
-		Process process = Runtime.getRuntime().exec("adb devices");
-      try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-          String line;
-          while ((line = reader.readLine()) != null) {
-              if (line.startsWith("emulator-") && line.trim().endsWith("device")) {
-                  return line.split("\\s+")[0]; // emulator-5554
-              }
-          }
-      }
-      return null;
-  }
-
 
     /**
      * Frame a URL from the provided string.
@@ -230,11 +188,6 @@ public class Engine {
         capabilities.setCapability("disableAndroidWatchers", Boolean.parseBoolean(androidProperties.getProperty("disable.android.watchers"))); // Disable Android system event watchers
         capabilities.setCapability("ignoreUnimportantViews", Boolean.parseBoolean(androidProperties.getProperty("ignore.unimportant.views"))); // Ignore unimportant views to improve speed
         capabilities.setCapability("disableNotifications", Boolean.parseBoolean(androidProperties.getProperty("disable.notifications"))); // Disable notifications during test
-
-     // 🚀 Auto-start emulator
-        capabilities.setCapability("avd", androidProperties.getProperty("avd.name")); // e.g., Pixel_6_API_34
-        capabilities.setCapability("avdLaunchTimeout", 120000);
-        capabilities.setCapability("avdReadyTimeout", 120000);
         return capabilities;
     }
 
