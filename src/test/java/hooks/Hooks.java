@@ -26,10 +26,13 @@ public class Hooks {
 
     /**
      * Method executed before all tests.
+     * @throws InterruptedException 
+     * @throws IOException 
      *
      */
     @BeforeAll
-    public static void beforeAll() {
+    public static void beforeAll() throws IOException, InterruptedException {
+    	
     	initializeDriver();
     }
 

@@ -5,6 +5,8 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import logger.Log;
+import utils.EmulatorManager;
+
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -106,40 +108,40 @@ public class Engine {
 //        Log.info("Driver Started....");
 //        tlDriver.set(driver);
 //    }
-    /*new start emulator code need to change driver */
+    
     public static void initializeDriver() {
         Properties properties = getProperties();
         AppiumDriver driver;
 
-        try {
-            // Start emulator first (only for local Android runs)
-            if (isLocal() && isAndroid()) {
-                startEmulatorIfNeeded();
-            }
-        } catch (Exception e) {
-            Log.error("Failed to start emulator", e);
-            throw new RuntimeException(e);
-        }
-
-        // Start Appium server
-        URL appiumServerURL = isLocal()
-                ? startAppiumServer()
-                : frameUrl(properties.getProperty("appium.server.url.remote"));
+        // Start Appium server (local or remote)
+        URL appiumServerURL = isLocal() ? startAppiumServer() : frameUrl(properties.getProperty("appium.server.url.remote"));
         assert appiumServerURL != null;
 
-        // Create driver
-        if (isAndroid()) {
-            driver = isLocal()
-                    ? new AndroidDriver(appiumServerURL, getAndroidDesiredCapabilities())
-                    : new AndroidDriver(appiumServerURL, getAndroidRemoteDesiredCapabilities());
-        } else {
-            driver = isLocal()
-                    ? new AndroidDriver(appiumServerURL, getIosDesiredCapabilities())
-                    : new AndroidDriver(appiumServerURL, getIosRemoteDesiredCapabilities());
+        // 🚀 Start emulator automatically if Android + local execution
+        if (isAndroid() && isLocal()) {
+            try {
+                String avdName = getAndroidProperties().getProperty("avd.name");
+                EmulatorManager.startEmulator(avdName); // This will block until emulator fully boots
+            } catch (IOException | InterruptedException e) {
+                Log.error("Failed to start emulator: " + e.getMessage());
+                throw new RuntimeException(e);
+            }
         }
 
-        // Set implicit wait
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(Long.parseLong(properties.getProperty("implicit.wait"))));
+        // Initialize Android or iOS driver
+        if (isAndroid()) {
+            driver = isLocal() ?
+                    new AndroidDriver(appiumServerURL, getAndroidDesiredCapabilities()) :
+                    new AndroidDriver(appiumServerURL, getAndroidRemoteDesiredCapabilities());
+        } else {
+            driver = isLocal() ?
+                    new AndroidDriver(appiumServerURL, getIosDesiredCapabilities()) :
+                    new AndroidDriver(appiumServerURL, getIosRemoteDesiredCapabilities());
+        }
+
+        driver.manage().timeouts().implicitlyWait(
+                Duration.ofSeconds(Long.parseLong(properties.getProperty("implicit.wait")))
+        );
         Log.info("Driver Started....");
         tlDriver.set(driver);
     }
@@ -180,58 +182,7 @@ public class Engine {
         }
     }
     
-    /* start emulator code */
-    /**
-     * Start emulator only if it's not running and wait until it’s booted.
-     */
-    @SuppressWarnings("deprecation")
-	private static void startEmulatorIfNeeded() throws IOException, InterruptedException {
-        Properties androidProps = getAndroidProperties();
-        String avdName = androidProps.getProperty("avd.name");
-
-        if (avdName == null || avdName.trim().isEmpty()) {
-            Log.error("AVD name not set in android-config.properties");
-            throw new RuntimeException("AVD name missing");
-        }
-
-        // Check if any emulator/device is already running
-        Process checkProcess = Runtime.getRuntime().exec("adb devices");
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(checkProcess.getInputStream()))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                if (line.endsWith("device") && !line.startsWith("List")) {
-                    Log.info("Emulator already running: " + line);
-                    return; // Already running
-                }
-            }
-        }
-
-        // Start emulator
-        Log.info("Starting emulator: " + avdName);
-        new ProcessBuilder(
-                "cmd.exe", "/c", "start", "cmd.exe", "/k",
-                "emulator -avd " + avdName + " -no-snapshot-load -no-boot-anim"
-        ).start();
-
-        // Wait for boot completion
-        Log.info("Waiting for emulator to boot...");
-        long start = System.currentTimeMillis();
-        while (System.currentTimeMillis() - start < 180000) { // 3 minutes
-            Process bootCheck = Runtime.getRuntime().exec("adb shell getprop sys.boot_completed");
-            try (BufferedReader bootReader = new BufferedReader(new InputStreamReader(bootCheck.getInputStream()))) {
-                String output = bootReader.readLine();
-                if ("1".equals(output)) {
-                    Log.info("Emulator booted successfully.");
-                    return;
-                }
-            }
-            Thread.sleep(3000);
-        }
-        throw new RuntimeException("Emulator boot timeout exceeded.");
-    }
-    
-
-    
+     
   /*close Emulator*/
   
   @SuppressWarnings("deprecation")
@@ -320,7 +271,11 @@ public class Engine {
         capabilities.setCapability("disableAndroidWatchers", Boolean.parseBoolean(androidProperties.getProperty("disable.android.watchers"))); // Disable Android system event watchers
         capabilities.setCapability("ignoreUnimportantViews", Boolean.parseBoolean(androidProperties.getProperty("ignore.unimportant.views"))); // Ignore unimportant views to improve speed
         capabilities.setCapability("disableNotifications", Boolean.parseBoolean(androidProperties.getProperty("disable.notifications"))); // Disable notifications during test
-
+        capabilities.setCapability("avdLaunchTimeout", androidProperties.getProperty("avd.launch.timeout"));
+        capabilities.setCapability("avdReadyTimeout", androidProperties.getProperty("avd.Ready.timeout"));
+        capabilities.setCapability("adbExecTimeout", 60000); // 60s
+        capabilities.setCapability("uiautomator2ServerLaunchTimeout", 60000);
+        capabilities.setCapability("uiautomator2ServerInstallTimeout", 60000);
      // 🚀 Auto-start emulator
 //        capabilities.setCapability("avd", androidProperties.getProperty("avd.name")); // e.g., Pixel_6_API_34
 //        capabilities.setCapability("avdLaunchTimeout", 120000);
