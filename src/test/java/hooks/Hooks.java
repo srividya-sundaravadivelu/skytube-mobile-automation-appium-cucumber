@@ -89,6 +89,9 @@ public class Hooks {
         
         quitDriver();
         stopAppiumServer();
+        
+        
+        
         String home = System.getProperty("user.dir");
         Log.info("------------------------------------------------------");
         Log.info("Reports Generated...");

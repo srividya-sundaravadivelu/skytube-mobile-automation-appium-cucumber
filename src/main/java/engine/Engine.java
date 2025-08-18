@@ -117,7 +117,16 @@ public class Engine {
     }
     
     public static URL getAppiumServerUrl() {
-        return appiumserverUrl;
+    	if (isLocal())
+    	{
+    		return appiumserverUrl;
+    	}    		
+    	else
+    	{
+    		Properties properties = getProperties();
+    		return frameUrl(properties.getProperty("appium.server.url.remote"));
+    	}  		
+    	
     }
 
     /**
@@ -141,6 +150,7 @@ public class Engine {
             Log.info("App Terminated...");
         }
     }
+    
 
     /**
      * Frame a URL from the provided string.
@@ -148,7 +158,8 @@ public class Engine {
      * @param url the string representation of the URL.
      * @return the URL object parsed from the string. 
      */
-    public static URL frameUrl(String url) {
+    @SuppressWarnings("deprecation")
+	public static URL frameUrl(String url) {
         try {
             return new URL(url);
         } catch (MalformedURLException e) {

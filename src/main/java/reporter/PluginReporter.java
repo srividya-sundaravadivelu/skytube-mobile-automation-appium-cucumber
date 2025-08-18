@@ -7,6 +7,8 @@ import java.net.URL;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
+import kong.unirest.json.JSONObject;
+import logger.Log;
 
 public class PluginReporter {
 
@@ -18,18 +20,23 @@ public class PluginReporter {
 			}
 			String url = baseUrl + "/setTestInfo";
 
-			String body = "{" + "\"sessionId\":\"" + sessionId + "\"," + "\"testName\":\"" + testName + "\","
-					+ "\"testStatus\":\"" + testStatus + "\"," + "\"error\":\"" + error + "\"" + "}";
-			System.out.println("url = " + url);
-			System.out.println("Body of setTestInfo = " + body);
+			JSONObject jsonBody = new JSONObject();
+			jsonBody.put("sessionId", sessionId);
+			jsonBody.put("testName", testName);
+			jsonBody.put("testStatus", testStatus);
+			jsonBody.put("error", error);
+
+			Log.info("url = " + url);
+			Log.info("Body of setTestInfo = " + jsonBody.toString());
+
 			HttpResponse<JsonNode> jsonNodeHttpResponse = Unirest.post(url).header("Content-Type", "application/json")
-					.body(body).asJson();
+					.body(jsonBody.toString()).asJson();
 
-			System.out.println("Response Status: " + jsonNodeHttpResponse.getStatus());			
+			Log.info("Response Status: " + jsonNodeHttpResponse.getStatus());
 		} catch (Exception e) {
-			System.out.println("Failed to set Test info");
+			Log.error("Failed to set Test info");
+			//e.printStackTrace();
 		}
-
 	}
 
 	public static String getReport(URL serverUrl) throws IOException, InterruptedException {
@@ -37,8 +44,7 @@ public class PluginReporter {
 		if (baseUrl.endsWith("/")) {
 			baseUrl = baseUrl.substring(0, baseUrl.length() - 1);
 		}
-		String url = baseUrl + "/getReport";
-		//String url = serverUrl.toString() + "/getReport";
+		String url = baseUrl + "/getReport";		
 		String s = Unirest.get(url).asString().getBody();
 		return s;
 	}
@@ -48,8 +54,7 @@ public class PluginReporter {
 		if (baseUrl.endsWith("/")) {
 			baseUrl = baseUrl.substring(0, baseUrl.length() - 1);
 		}
-		String url = baseUrl + "/deleteReportData";
-		//String url = serverUrl.toString() + "/deleteReportData";
+		String url = baseUrl + "/deleteReportData";		
 		Unirest.delete(url).asEmpty();
 	}
 
