@@ -9,9 +9,6 @@ import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
@@ -117,7 +114,16 @@ public class Engine {
     }
     
     public static URL getAppiumServerUrl() {
-        return appiumserverUrl;
+    	if (isLocal())
+    	{
+    		return appiumserverUrl;
+    	}    		
+    	else
+    	{
+    		Properties properties = getProperties();
+    		return frameUrl(properties.getProperty("appium.server.url.remote"));
+    	}  		
+    	
     }
 
     /**
