@@ -23,14 +23,6 @@ public class DownloadVideoSteps {
 
 	@Then("The Downloads Tab should display a message Download some videos to find them here")
 	public void the_downloads_tab_should_display_a_message_download_some_videos_to_find_them_here() {
-//		WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
-//
-//		// Locate the empty state message element
-//		WebElement emptyMessageElement = wait
-//				.until(ExpectedConditions.visibilityOf(downloadVedioPage.downloadSomeVediosMsg));	
-
-		// Assert.assertEquals("Download some videos to find them here.",
-		// emptyMessageElement.getText());
 
 		String msg = downloadVedioPage.downloadSomeVediosMsg.getText();
 		Assert.assertEquals("Download some videos to find them here.", msg);
