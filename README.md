@@ -38,6 +38,9 @@ Make sure the Android Emulator is running before executing tests
 
 ### Cross-Platform Testing :
 Supports both Android & iOS mobile applications
+
+### Remote execution :
+Test execution in local emulators as well as cloud device farms like Sauce Labs.
  
 ### Page Object Model (POM) :
 Page Objects use @AndroidFindBy and @iosXCUITFindBy to support cross-platform locators.
