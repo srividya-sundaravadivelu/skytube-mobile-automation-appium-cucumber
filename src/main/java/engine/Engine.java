@@ -4,6 +4,9 @@ import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
+import io.appium.java_client.android.nativekey.AndroidKey;
+import io.appium.java_client.android.nativekey.KeyEvent;
+
 import logger.Log;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriverException;
@@ -105,6 +108,10 @@ public class Engine {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(Long.parseLong(properties.getProperty("implicit.wait"))));
         Log.info("Driver Started....");
         tlDriver.set(driver);
+        Log.info("Driver Started....");
+
+        
+
     }
 
     /**
@@ -148,6 +155,23 @@ public class Engine {
             waitFor(Duration.ofSeconds(2));
             driver.quit();
             Log.info("App Terminated...");
+        }
+    }
+    
+    public static void unlockDeviceIfLocked() {
+        AppiumDriver driver = getDriver();
+        if (driver != null && isAndroid()) {
+            try {
+                // Unlock device if locked
+                ((AndroidDriver) driver).unlockDevice();
+
+                // Press Home to avoid overlays like "Wallpaper & style"
+                ((AndroidDriver) driver).pressKey(new KeyEvent(AndroidKey.HOME));
+
+                Log.info("Device unlocked and home screen activated.");
+            } catch (Exception e) {
+                Log.error("Failed to unlock device: " + e.getMessage(), e);
+            }
         }
     }
     
@@ -204,7 +228,15 @@ public class Engine {
         //capabilities.setCapability("appium:element-wait:condition", "visible");
         capabilities.setCapability("appium:element-wait:condition", androidProperties.getProperty("element.wait.condition", "visible"));
 
+        // Timeouts for emulator/Jenkins stability
+        capabilities.setCapability("avdLaunchTimeout", 300000);   // wait up to 5 min for emulator launch
+        capabilities.setCapability("avdReadyTimeout", 300000);    // wait up to 5 min for boot complete
+        capabilities.setCapability("adbExecTimeout", 60000);      // wait up to 1 min for adb command execution
+        capabilities.setCapability("uiautomator2ServerInstallTimeout", 120000);
+        capabilities.setCapability("uiautomator2ServerLaunchTimeout", 120000);
+
         return capabilities;
+
     }
 
     /**
