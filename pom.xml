@@ -31,10 +31,9 @@
 		<platform>android</platform> <!--sri-->
 		<env>qa</env>
 
-		<sauce.url>
-			https://oauth-srivi18.2002-ed91b:b8fd256a-58ed-411a-9b16-e8913b6b0cc7@ondemand.us-west-1.saucelabs.com:443/wd/hub</sauce.url>
-		<sauce.username>oauth-srivi18.2002-ed91b</sauce.username>
-		<sauce.password>b8fd256a-58ed-411a-9b16-e8913b6b0cc7</sauce.password>
+		<sauce.url>Dummy Url</sauce.url>
+		<sauce.username>Dummy User</sauce.username>
+		<sauce.password>Dummy password</sauce.password>
 
 		<runner.path>**/TestRunner.class</runner.path>
 		<screenshot>only.fail</screenshot>
